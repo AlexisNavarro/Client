@@ -54,9 +54,17 @@ const Form = () => {
     const isNonMobile = useMediaQuery("(min-width: 600px)");
     const isLogin = pageType === "login";
     const isRegister = pageType === "register";
+
+    const register = async (values, onSubmitProps) =>{
+        //allows to send form info with image
+        const formData = new FormData();
+    }
 }
 
-const handleFormSubmit = async (values, onSubmitProps) => { }
+const handleFormSubmit = async (values, onSubmitProps) => {
+    if(isLogin) await login(values, onSubmitProps);
+    if(isRegister) await registerSchema(values, onSubmitProps);
+ }
 
 return (
     <Formik
@@ -97,18 +105,7 @@ return (
                             />
 
                             <TextField
-                                label="Location"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.location}
-                                name="lastname"
-                                error={Boolean(touched.location) && Boolean(errors.location)} /*check if it has been touched or has an error */
-                                helperText={touched.location && errors.location} /*if it has been touched but we have an error, we will show the error or if touched show if it was touched*/
-                                sx={{ gridColumn: "span 2" }}
-                            />
-
-<TextField
-                                label="Location"
+                                label="Last Name"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 value={values.lastName}
@@ -118,8 +115,122 @@ return (
                                 sx={{ gridColumn: "span 2" }}
                             />
 
+                            <TextField
+                                label="Location"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.location}
+                                name="lastname"
+                                error={Boolean(touched.location) && Boolean(errors.location)} /*check if it has been touched or has an error */
+                                helperText={touched.location && errors.location} /*if it has been touched but we have an error, we will show the error or if touched show if it was touched*/
+                                sx={{ gridColumn: "span 4" }}
+                            />
+
+                            <TextField
+                                label="Occupation"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.occupation}
+                                name="lastname"
+                                error={Boolean(touched.occupation) && Boolean(errors.occupation)} /*check if it has been touched or has an error */
+                                helperText={touched.occupation && errors.occupation} /*if it has been touched but we have an error, we will show the error or if touched show if it was touched*/
+                                sx={{ gridColumn: "span 4" }}
+                            />
+
+                            <Box
+                                gridColumn="span 4"
+                                border={`1px solid ${palette.neutral.medium}`}
+                                borderRadius="5px"
+                                p="1rem"
+                            >
+                                <Dropzone
+                                    acceptedFiles=".jpg, jpeg, .png"
+                                    multiple={false}
+                                    onDrop={(acceptedFiles) =>
+                                        setFieldValue("picture", acceptedFiles[0])
+                                    }
+                                >
+                                    {({ getRootProps, getInputProps }) => (
+                                        <Box
+                                            {...getRootProps()}
+                                            border={`2px dashed ${palette.primary.main}`}
+                                            p="1rem"
+                                            sx={{ "&:hover": { cursor: "pointer" } }}
+                                        >
+                                            <input {...getInputProps()} />
+                                            {!values.picture ? (
+                                                <p>Add Picture Here</p>
+                                            ) : (
+                                                <FlexBetween>
+                                                    <Typography> {values.picture.name} </Typography>
+                                                    <EditOutlinedIcone />
+                                                </FlexBetween>
+                                            )}
+                                        </Box>
+                                    )}
+                                </Dropzone>
+                            </Box>
+
                         </>
                     )}
+
+                    <TextField
+                        label="Email"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.email}
+                        name="lastname"
+                        error={Boolean(touched.email) && Boolean(errors.email)} /*check if it has been touched or has an error */
+                        helperText={touched.email && errors.email} /*if it has been touched but we have an error, we will show the error or if touched show if it was touched*/
+                        sx={{ gridColumn: "span 4" }}
+                    />
+
+                    <TextField
+                        label="Password"
+                        type="password"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.password}
+                        name="lastname"
+                        error={Boolean(touched.password) && Boolean(errors.password)} /*check if it has been touched or has an error */
+                        helperText={touched.password && errors.password} /*if it has been touched but we have an error, we will show the error or if touched show if it was touched*/
+                        sx={{ gridColumn: "span 4" }}
+                    />
+                </Box>
+
+                {/* BUTTONS */}
+
+                <Box>
+                    <Button
+                        fullWidth
+                        type="submit"
+                        sx={{
+                            m: "2rem 0",
+                            p: "1rem",
+                            backgroundColor: palette.primary.main,
+                            color: palette.background.alt,
+                            "&:hover": { color: palette.primary.main }
+                        }}
+                    >
+                        {isLogin ? "LOGIN" : "REGISTER"}
+                    </Button>
+                    <Typography
+                        onClick={() => {
+                            setPageType(isLogin ? "register" : "login")
+                            resetForm();
+                        }}
+                        sx={{
+                            textDecoration: "underline",
+                            color: palette.primary.main,
+                            "&:hover": {
+                                cursor: "pointer",
+                                color: palette.primary.light,
+                            },
+                        }}
+                    >
+                        {isLogin ? "Don't have an account? sign up here." : "Already have an account? Login here."}
+
+                    </Typography>
                 </Box>
             </form>
         )}
